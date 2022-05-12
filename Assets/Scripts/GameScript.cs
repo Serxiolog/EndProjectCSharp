@@ -21,10 +21,12 @@ public class GameScript : MonoBehaviour
     public float GameTime;
     public bool HardMode;
     private System.Random rnd = new System.Random();
-    private List<GameObject> Moving = new List<GameObject>();
     public float Speed = 1;
     public GameObject Walls;
     public Text Timer;
+    public Text ScoreText;
+    public CubeBreaker Sword1;
+    public CubeBreaker Sword2;
 
     public float TimeGeneration = 1;
     private float TimePreGeneration = 0;
@@ -46,26 +48,28 @@ public class GameScript : MonoBehaviour
         {
             if (TimePreGeneration <= 0)
             {
-                Debug.Log("Generate box");
                 TimePreGeneration = TimeGeneration;
-                if (HardMode)
+                if (GameTime > 10)
                 {
-                    int a, b, c, d; //a:CoordY; b:CoordX; c:StandartCube; d:Side
-                    a = rnd.Next(0, 2);
-                    b = rnd.Next(0, 6);
-                    c = rnd.Next(0, 6);
-                    d = rnd.Next(0, 2);
-                    var _Cube = Instantiate(RL[d][c], new Vector3(RB[d][b], CoordsY[a], StartZ), Quaternion.identity);
-                    Moving.Add(_Cube);
-                }
-                else
-                {
-                    int a, b, c; //a:CoordY; b:CoordX; c:StandartCube
-                    a = rnd.Next(0, 1);
-                    b = rnd.Next(0, 5);
-                    c = rnd.Next(0, 5);
-                    var _Cube = Instantiate(StandartCubes[c], new Vector3(CoordsX[b], CoordsY[a], StartZ), Quaternion.identity);
-                    Moving.Add(_Cube);
+                    if (HardMode)
+                    {
+                        int a, b, c, d; //a:CoordY; b:CoordX; c:StandartCube; d:Side
+                        a = rnd.Next(0, 2);
+                        b = rnd.Next(0, 6);
+                        c = rnd.Next(0, 6);
+                        d = rnd.Next(0, 2);
+                        var _Cube = Instantiate(RL[d][c], new Vector3(RB[d][b], CoordsY[a], StartZ), Quaternion.identity);
+                        _Cube.AddComponent<CubeMoving>();
+                    }
+                    else
+                    {
+                        int a, b, c; //a:CoordY; b:CoordX; c:StandartCube
+                        a = rnd.Next(0, 1);
+                        b = rnd.Next(0, 5);
+                        c = rnd.Next(0, 5);
+                        var _Cube = Instantiate(StandartCubes[c], new Vector3(CoordsX[b], CoordsY[a], StartZ), Quaternion.identity);
+                        _Cube.AddComponent<CubeMoving>();
+                    }
                 }
             }
             else
@@ -78,24 +82,12 @@ public class GameScript : MonoBehaviour
         {
             Walls.SetActive(false);
         }
-        else if (Moving.Count == 0)
+        else
         {
             Walls.SetActive(true);
+            ScoreChanger();
         }
-        List<GameObject> list = new List<GameObject>();
-        foreach (var cube in Moving)
-        {
-            if (cube.tag != "Destroy")
-            {
-                list.Add(cube);
-            }
-        }
-        Moving.Clear();
-        Moving = list;
-        foreach (var cube in Moving)
-        {
-            cube.transform.position = new Vector3(cube.transform.position.x, cube.transform.position.y, cube.transform.position.z - (Time.deltaTime * Speed));
-        }
+
         
     }
 
@@ -134,5 +126,11 @@ public class GameScript : MonoBehaviour
     public void Checker()
     {
         Debug.Log("Changed");
+    }
+    
+    public void ScoreChanger()
+    {
+        Score = Sword1.Score + Sword2.Score;
+        ScoreText.text = $"Cubes were broken: \n {Score}";
     }
 }
