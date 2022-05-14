@@ -49,7 +49,7 @@ public class GameScript : MonoBehaviour
             if (TimePreGeneration <= 0)
             {
                 TimePreGeneration = TimeGeneration;
-                if (GameTime > 10)
+                if (GameTime > 10) // добавить разделение на мечи
                 {
                     if (HardMode)
                     {
@@ -64,9 +64,9 @@ public class GameScript : MonoBehaviour
                     else
                     {
                         int a, b, c; //a:CoordY; b:CoordX; c:StandartCube
-                        a = rnd.Next(0, 1);
-                        b = rnd.Next(0, 5);
-                        c = rnd.Next(0, 5);
+                        a = rnd.Next(0, 2);
+                        b = rnd.Next(0, 6);
+                        c = rnd.Next(0, 6);
                         var _Cube = Instantiate(StandartCubes[c], new Vector3(CoordsX[b], CoordsY[a], StartZ), Quaternion.identity);
                         _Cube.AddComponent<CubeMoving>();
                     }
