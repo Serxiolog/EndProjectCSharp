@@ -25,8 +25,10 @@ public class GameScript : MonoBehaviour
     public GameObject Walls;
     public Text Timer;
     public Text ScoreText;
+    public Text Speedometer;
     public CubeBreaker Sword1;
     public CubeBreaker Sword2;
+    public CubeBreaker Wall;
 
     public float TimeGeneration = 1;
     private float TimePreGeneration = 0;
@@ -60,6 +62,10 @@ public class GameScript : MonoBehaviour
                         d = rnd.Next(0, 2);
                         var _Cube = Instantiate(RL[d][c], new Vector3(RB[d][b], CoordsY[a], StartZ), Quaternion.identity);
                         _Cube.AddComponent<CubeMoving>();
+                        CubeMoving _Move = _Cube.gameObject.GetComponent<CubeMoving>();
+                        _Move.speed = Speed;
+                        _Move.Color = d;
+                        
                     }
                     else
                     {
@@ -69,6 +75,10 @@ public class GameScript : MonoBehaviour
                         c = rnd.Next(0, 6);
                         var _Cube = Instantiate(StandartCubes[c], new Vector3(CoordsX[b], CoordsY[a], StartZ), Quaternion.identity);
                         _Cube.AddComponent<CubeMoving>();
+                        CubeMoving _Move = _Cube.gameObject.GetComponent<CubeMoving>();
+                        _Move.speed = Speed;
+                        _Move.Color = 2;
+
                     }
                 }
             }
@@ -130,7 +140,19 @@ public class GameScript : MonoBehaviour
     
     public void ScoreChanger()
     {
-        Score = Sword1.Score + Sword2.Score;
-        ScoreText.text = $"Cubes were broken: \n {Score}";
+        ScoreText.text = $"Points:\n" +
+            $"\tLeft hand: {Sword1.Score} \n" +
+            $"\tRight hand: {Sword2.Score} \n" +
+            $"\tLose: {Wall.Score}";
+    }
+
+    public void SpeedChanger()
+    {
+        Speed += 0.5f;
+        if (Speed > 2)
+        {
+            Speed = 1;
+        }
+        Speedometer.text = $"{Speed}";
     }
 }

@@ -7,26 +7,31 @@ public class CubeBreaker : MonoBehaviour
     public int Score;
     private GameObject Cube;
     public bool Wall = false;
+    public int SwordID = 0;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "CubeComponent")
         {
+            
             Cube = other.transform.parent.gameObject;
             var CubeMove = Cube.GetComponent<CubeMoving>();
-            CubeMove.speed = 0;
-            var Kilka = Cube.GetComponent<Rigidbody>();
-            Kilka.useGravity = true;
-            if (!Wall)
+            int CubeColor = CubeMove.Color;
+            if (CubeColor == 2 || CubeColor == SwordID || Wall)
             {
-                Destroy(Cube, 0.5f);
+                CubeMove.speed = 0;
+                var Kilka = Cube.GetComponent<Rigidbody>();
+                Kilka.useGravity = true;
                 Score++;
+                if (!Wall)
+                {
+                    Destroy(Cube, 0.5f);
+                }
+                else
+                {
+                    Destroy(Cube, 0.1f);
+                }
             }
-            else
-            {
-                Destroy(Cube, 0.1f);
-            }
-            
         }
     }
     

@@ -6,6 +6,7 @@ public class CubeMoving : MonoBehaviour
 {
     private Transform CubeTransform;
     public float speed = 1.3f;
+    public int Color; // 0 - red 1 - blue
     void Start()
     {
         CubeTransform = GetComponent<Transform>();
@@ -15,5 +16,10 @@ public class CubeMoving : MonoBehaviour
     {
         CubeTransform.position = new Vector3 (CubeTransform.position.x, CubeTransform.position.y, CubeTransform.position.z - (Time.deltaTime * speed));
         CubeTransform.rotation = Quaternion.identity;
+    }
+
+    void SpeedChanger()
+    {
+
     }
 }
